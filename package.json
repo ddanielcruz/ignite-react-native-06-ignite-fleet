@@ -4,21 +4,23 @@
   "private": true,
   "main": "expo/AppEntry.js",
   "scripts": {
-    "start": "expo start",
-    "start:android": "expo start --android",
-    "start:ios": "expo start --ios",
+    "start": "expo start --dev-client",
+    "start:android": "expo run:android",
+    "start:ios": "expo run:ios",
     "android": "expo run:android",
     "ios": "expo run:ios"
   },
   "dependencies": {
     "@expo-google-fonts/roboto": "^0.2.3",
     "@react-native-google-signin/google-signin": "^12.1.1",
+    "@realm/react": "^0.7.0",
     "expo": "~51.0.9",
     "expo-font": "~12.0.6",
     "expo-status-bar": "~1.12.1",
     "expo-system-ui": "~3.0.4",
     "react": "18.2.0",
     "react-native": "0.74.1",
+    "realm": "^12.9.0",
     "styled-components": "^6.1.11"
   },
   "devDependencies": {

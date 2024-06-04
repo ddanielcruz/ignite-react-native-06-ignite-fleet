@@ -14,17 +14,17 @@ GoogleSignin.configure({
   iosClientId: GOOGLE_CLIENT_ID_IOS,
 })
 
-export function SignIn() {
+export function SignInScreen() {
   const [isAuthenticating, setIsAuthenticating] = useState(false)
 
   async function handleGoogleSignIn() {
     try {
       setIsAuthenticating(true)
 
-      const { idToken } = await GoogleSignin.signIn()
+      const { idToken, user } = await GoogleSignin.signIn()
       if (idToken) {
         // TODO Send the token to the backend
-        return
+        return console.log(user)
       }
 
       throw new Error('Authentication failed!')
