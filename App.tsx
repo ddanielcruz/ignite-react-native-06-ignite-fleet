@@ -9,7 +9,7 @@ import { StatusBar } from 'expo-status-bar'
 import { SafeAreaProvider } from 'react-native-safe-area-context'
 import { ThemeProvider } from 'styled-components'
 
-import { HomeScreen } from '@/screens/home'
+import { Routes } from '@/routes'
 
 import { Loading } from './src/components/loading'
 import { SignInScreen } from './src/screens/sign-in'
@@ -35,7 +35,7 @@ export default function App() {
         <ThemeProvider theme={theme}>
           <StatusBar style="light" />
           <UserProvider fallback={SignInScreen}>
-            <HomeScreen />
+            <Routes />
           </UserProvider>
         </ThemeProvider>
       </SafeAreaProvider>
