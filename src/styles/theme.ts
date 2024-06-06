@@ -14,11 +14,11 @@ export const theme = {
     gray700: '#29292E',
     gray600: '#323238',
   },
-  fontFamily: {
+  fonts: {
     regular: 'Roboto_400Regular',
     bold: 'Roboto_700Bold',
   },
-  fontSize: {
+  fontSizes: {
     xs: 12,
     sm: 14,
     md: 16,

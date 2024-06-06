@@ -6,6 +6,7 @@ import {
 } from '@expo-google-fonts/roboto'
 import { AppProvider, UserProvider } from '@realm/react'
 import { StatusBar } from 'expo-status-bar'
+import { SafeAreaProvider } from 'react-native-safe-area-context'
 import { ThemeProvider } from 'styled-components'
 
 import { HomeScreen } from '@/screens/home'
@@ -30,12 +31,14 @@ export default function App() {
 
   return (
     <AppProvider id={REALM_APP_ID}>
-      <ThemeProvider theme={theme}>
-        <StatusBar style="light" />
-        <UserProvider fallback={SignInScreen}>
-          <HomeScreen />
-        </UserProvider>
-      </ThemeProvider>
+      <SafeAreaProvider>
+        <ThemeProvider theme={theme}>
+          <StatusBar style="light" />
+          <UserProvider fallback={SignInScreen}>
+            <HomeScreen />
+          </UserProvider>
+        </ThemeProvider>
+      </SafeAreaProvider>
     </AppProvider>
   )
 }

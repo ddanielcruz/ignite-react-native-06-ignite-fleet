@@ -9,16 +9,16 @@ export const Container = styled.ImageBackground`
 
 export const Title = styled.Text`
   color: ${({ theme }) => theme.colors.brandLight};
-  font-size: ${({ theme }) => theme.fontSize.xxxl}px;
-  font-family: ${({ theme }) => theme.fontFamily.bold};
+  font-size: ${({ theme }) => theme.fontSizes.xxxl}px;
+  font-family: ${({ theme }) => theme.fonts.bold};
   text-align: center;
   margin-bottom: 6px;
 `
 
 export const Slogan = styled.Text`
   color: ${({ theme }) => theme.colors.gray100};
-  font-size: ${({ theme }) => theme.fontSize.md}px;
-  font-family: ${({ theme }) => theme.fontFamily.regular};
+  font-size: ${({ theme }) => theme.fontSizes.md}px;
+  font-family: ${({ theme }) => theme.fonts.regular};
   text-align: center;
 
   margin-bottom: 32px;
