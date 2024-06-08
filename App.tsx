@@ -9,11 +9,11 @@ import { StatusBar } from 'expo-status-bar'
 import { SafeAreaProvider } from 'react-native-safe-area-context'
 import { ThemeProvider } from 'styled-components'
 
+import { Loading } from '@/components/loading'
+import { RealmProvider } from '@/lib/realm'
 import { Routes } from '@/routes'
-
-import { Loading } from './src/components/loading'
-import { SignInScreen } from './src/screens/sign-in'
-import { theme } from './src/styles/theme'
+import { SignInScreen } from '@/screens/sign-in'
+import { theme } from '@/styles/theme'
 
 export default function App() {
   const [hasLoadedFonts] = useFonts({
@@ -35,7 +35,9 @@ export default function App() {
         <ThemeProvider theme={theme}>
           <StatusBar style="light" />
           <UserProvider fallback={SignInScreen}>
-            <Routes />
+            <RealmProvider>
+              <Routes />
+            </RealmProvider>
           </UserProvider>
         </ThemeProvider>
       </SafeAreaProvider>

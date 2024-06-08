@@ -1,0 +1,8 @@
+import { createRealmContext } from '@realm/react'
+
+import { History } from './schemas/history'
+
+export const { RealmProvider, useRealm, useQuery, useObject } =
+  createRealmContext({
+    schema: [History],
+  })
