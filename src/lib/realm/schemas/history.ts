@@ -18,7 +18,7 @@ export class History extends Realm.Object<History> {
   updatedAt!: Date
 
   static schema: Realm.ObjectSchema = {
-    name: 'Histoy',
+    name: 'History',
     primaryKey: '_id',
     properties: {
       _id: 'uuid',
