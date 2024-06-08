@@ -1,11 +1,25 @@
-import { HomeHeader } from '@/components/home-header'
+import { useNavigation } from '@react-navigation/native'
 
-import { Container } from './styles'
+import { CarStatus } from '@/components/car-status'
+import { HomeHeader } from '@/components/home-header'
+import { Screen } from '@/components/screen'
+
+import { Content } from './styles'
 
 export function HomeScreen() {
+  const navigation = useNavigation()
+
+  function handleRegisterDeparture() {
+    navigation.navigate('departure')
+  }
+
   return (
-    <Container>
+    <Screen>
       <HomeHeader />
-    </Container>
+
+      <Content>
+        <CarStatus onPress={handleRegisterDeparture} />
+      </Content>
+    </Screen>
   )
 }

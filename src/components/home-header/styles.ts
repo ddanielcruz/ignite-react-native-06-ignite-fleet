@@ -2,6 +2,13 @@ import { Image } from 'expo-image'
 import { Power } from 'phosphor-react-native'
 import styled from 'styled-components/native'
 
+export const Container = styled.View`
+  padding: 32px;
+
+  flex-direction: row;
+  align-items: center;
+`
+
 export const Greeting = styled.View`
   flex: 1;
   margin-left: 12px;

@@ -31,7 +31,12 @@ export default function App() {
 
   return (
     <AppProvider id={REALM_APP_ID}>
-      <SafeAreaProvider>
+      <SafeAreaProvider
+        style={{
+          flex: 1,
+          backgroundColor: theme.colors.gray800,
+        }}
+      >
         <ThemeProvider theme={theme}>
           <StatusBar style="light" />
           <UserProvider fallback={SignInScreen}>

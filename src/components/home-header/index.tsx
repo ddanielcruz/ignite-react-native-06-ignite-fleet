@@ -1,8 +1,9 @@
 import { useApp, useUser } from '@realm/react'
 
-import { Header } from '../header'
+import { BaseHeader } from '../base-header'
 import { TouchableOpacity } from '../touchable-opacity'
 import {
+  Container,
   Greeting,
   GreetingMessage,
   SignOutIcon,
@@ -23,17 +24,19 @@ export function HomeHeader() {
   }
 
   return (
-    <Header>
-      <UserImage source={pictureUrl} />
+    <BaseHeader>
+      <Container>
+        <UserImage source={pictureUrl} />
 
-      <Greeting>
-        <GreetingMessage>Olá,</GreetingMessage>
-        <UserName>{firstName}</UserName>
-      </Greeting>
+        <Greeting>
+          <GreetingMessage>Olá,</GreetingMessage>
+          <UserName>{firstName}</UserName>
+        </Greeting>
 
-      <TouchableOpacity activeOpacity={0.7} onPress={handleLogout}>
-        <SignOutIcon />
-      </TouchableOpacity>
-    </Header>
+        <TouchableOpacity activeOpacity={0.7} onPress={handleLogout}>
+          <SignOutIcon />
+        </TouchableOpacity>
+      </Container>
+    </BaseHeader>
   )
 }
