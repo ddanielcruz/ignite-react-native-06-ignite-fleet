@@ -6,7 +6,7 @@ export interface CreateHistoryData {
   description: string
 }
 
-export type HistoryStatus = 'departure'
+export type HistoryStatus = 'departure' | 'arrival'
 
 export class History extends Realm.Object<History> {
   _id!: string
