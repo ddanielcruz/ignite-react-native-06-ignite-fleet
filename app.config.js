@@ -1,6 +1,6 @@
 import 'dotenv/config'
 
-const { GOOGLE_CLIENT_ID_IOS } = process.env
+const { GOOGLE_CLIENT_ID_IOS, GOOGLE_MAPS_API_KEY } = process.env
 if (!GOOGLE_CLIENT_ID_IOS) {
   throw new Error('GOOGLE_CLIENT_ID_IOS is not set')
 }
@@ -8,6 +8,10 @@ if (!GOOGLE_CLIENT_ID_IOS) {
 const GOOGLE_CLIENT_ID_IOS_REVERSED = GOOGLE_CLIENT_ID_IOS.split('.')
   .reverse()
   .join('.')
+
+if (!GOOGLE_MAPS_API_KEY) {
+  throw new Error('GOOGLE_MAPS_API_KEY is not set')
+}
 
 module.exports = {
   expo: {
@@ -32,6 +36,9 @@ module.exports = {
           },
         ],
       },
+      config: {
+        googleMapsApiKey: GOOGLE_MAPS_API_KEY,
+      },
     },
     android: {
       adaptiveIcon: {
@@ -39,6 +46,11 @@ module.exports = {
         backgroundColor: '#202024',
       },
       package: 'com.danielcruz.ignitefleet',
+      config: {
+        googleMaps: {
+          apiKey: GOOGLE_MAPS_API_KEY,
+        },
+      },
     },
     plugins: [
       'expo-font',
