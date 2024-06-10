@@ -42,6 +42,12 @@
       <key>NSAllowsLocalNetworking</key>
       <true/>
     </dict>
+    <key>NSLocationAlwaysAndWhenInUseUsageDescription</key>
+    <string>Allow IgniteFleet to use your location.</string>
+    <key>NSLocationAlwaysUsageDescription</key>
+    <string>Allow IgniteFleet to access your location</string>
+    <key>NSLocationWhenInUseUsageDescription</key>
+    <string>Allow IgniteFleet to access your location</string>
     <key>UILaunchStoryboardName</key>
     <string>SplashScreen</string>
     <key>UIRequiredDeviceCapabilities</key>

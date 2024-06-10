@@ -1,6 +1,7 @@
 import { useNavigation } from '@react-navigation/native'
 import { useUser } from '@realm/react'
-import { useRef, useState } from 'react'
+import { useForegroundPermissions } from 'expo-location'
+import { useEffect, useRef, useState } from 'react'
 import { Alert, ScrollView, TextInput } from 'react-native'
 import { KeyboardAwareScrollView } from 'react-native-keyboard-aware-scroll-view'
 
@@ -13,7 +14,7 @@ import { useRealm } from '@/lib/realm'
 import { History } from '@/lib/realm/schemas/history'
 import { isValidLicensePlate } from '@/utils/validations'
 
-import { Content } from './styles'
+import { Content, Message } from './styles'
 
 export function DepartureScreen() {
   const realm = useRealm()
@@ -21,6 +22,9 @@ export function DepartureScreen() {
   const navigation = useNavigation()
   const licensePlateRef = useRef<TextInput>(null)
   const descriptionRef = useRef<TextInput>(null)
+  const [locationForegroundPermissions, requestLocationForegroundPermissions] =
+    useForegroundPermissions()
+  const hasLocationPermission = locationForegroundPermissions?.granted ?? false
 
   const [licensePlate, setLicensePlate] = useState('')
   const [description, setDescription] = useState('')
@@ -66,6 +70,25 @@ export function DepartureScreen() {
     } finally {
       setIsRegistering(false)
     }
+  }
+
+  useEffect(() => {
+    requestLocationForegroundPermissions()
+  }, [requestLocationForegroundPermissions])
+
+  if (!hasLocationPermission) {
+    return (
+      <Screen>
+        <ScreenHeader title="Saída" />
+
+        <Content>
+          <Message>
+            Para registrar a saída do veículo, é necessário conceder permissão
+            de localização.
+          </Message>
+        </Content>
+      </Screen>
+    )
   }
 
   return (

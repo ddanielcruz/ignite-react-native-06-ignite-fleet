@@ -40,15 +40,19 @@ module.exports = {
       },
       package: 'com.danielcruz.ignitefleet',
     },
-    web: {
-      favicon: './assets/favicon.png',
-    },
     plugins: [
       'expo-font',
       [
         '@react-native-google-signin/google-signin',
         {
           iosUrlScheme: GOOGLE_CLIENT_ID_IOS_REVERSED,
+        },
+      ],
+      [
+        'expo-location',
+        {
+          locationAlwaysAndWhenInUsePermission:
+            'Allow IgniteFleet to use your location.',
         },
       ],
     ],

@@ -21,6 +21,7 @@
     "expo": "~51.0.9",
     "expo-font": "~12.0.6",
     "expo-image": "~1.12.10",
+    "expo-location": "~17.0.1",
     "expo-status-bar": "~1.12.1",
     "expo-system-ui": "~3.0.4",
     "phosphor-react-native": "^2.0.0",
