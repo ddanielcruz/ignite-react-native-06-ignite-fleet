@@ -1,17 +1,26 @@
 import { useNavigation } from '@react-navigation/native'
 import { useUser } from '@realm/react'
-import { useForegroundPermissions } from 'expo-location'
-import { useEffect, useRef, useState } from 'react'
+import {
+  LocationAccuracy,
+  LocationSubscription,
+  useForegroundPermissions,
+  watchPositionAsync,
+} from 'expo-location'
+import { Car } from 'phosphor-react-native'
+import { useEffect, useMemo, useRef, useState } from 'react'
 import { Alert, ScrollView, TextInput } from 'react-native'
 import { KeyboardAwareScrollView } from 'react-native-keyboard-aware-scroll-view'
 
 import { Button } from '@/components/button'
 import { LicensePlateInput } from '@/components/license-plate-input'
+import { Loading } from '@/components/loading'
+import { LocationInfo } from '@/components/location-info'
 import { Screen } from '@/components/screen'
 import { ScreenHeader } from '@/components/screen-header'
 import { TextArea } from '@/components/text-area'
 import { useRealm } from '@/lib/realm'
 import { History } from '@/lib/realm/schemas/history'
+import { getAddressLocation } from '@/utils/get-address-location'
 import { isValidLicensePlate } from '@/utils/validations'
 
 import { Content, Message } from './styles'
@@ -24,11 +33,16 @@ export function DepartureScreen() {
   const descriptionRef = useRef<TextInput>(null)
   const [locationForegroundPermissions, requestLocationForegroundPermissions] =
     useForegroundPermissions()
-  const hasLocationPermission = locationForegroundPermissions?.granted ?? false
+  const hasLocationPermission = useMemo(
+    () => locationForegroundPermissions?.granted ?? false,
+    [locationForegroundPermissions],
+  )
 
   const [licensePlate, setLicensePlate] = useState('')
   const [description, setDescription] = useState('')
   const [isRegistering, setIsRegistering] = useState(false)
+  const [isLoadingLocation, setIsLoadingLocation] = useState(true)
+  const [currentAddress, setLocation] = useState<string | null>(null)
 
   async function handleRegisterDeparture() {
     if (!isValidLicensePlate(licensePlate)) {
@@ -76,6 +90,30 @@ export function DepartureScreen() {
     requestLocationForegroundPermissions()
   }, [requestLocationForegroundPermissions])
 
+  useEffect(() => {
+    if (!hasLocationPermission) {
+      return
+    }
+
+    let subscription: LocationSubscription | undefined
+
+    watchPositionAsync(
+      {
+        accuracy: LocationAccuracy.High,
+        timeInterval: 1000,
+      },
+      (location) => {
+        getAddressLocation(location.coords)
+          .then((address) => address && setLocation(address))
+          .finally(() => setIsLoadingLocation(false))
+      },
+    ).then((sub) => {
+      subscription = sub
+    })
+
+    return () => subscription?.remove()
+  }, [hasLocationPermission])
+
   if (!hasLocationPermission) {
     return (
       <Screen>
@@ -91,6 +129,15 @@ export function DepartureScreen() {
     )
   }
 
+  if (isLoadingLocation) {
+    return (
+      <Screen>
+        <ScreenHeader title="Saída" />
+        <Loading />
+      </Screen>
+    )
+  }
+
   return (
     <Screen>
       <ScreenHeader title="Saída" />
@@ -98,6 +145,14 @@ export function DepartureScreen() {
       <KeyboardAwareScrollView>
         <ScrollView>
           <Content>
+            {currentAddress && (
+              <LocationInfo
+                label="Localização atual"
+                location={currentAddress}
+                icon={Car}
+              />
+            )}
+
             <LicensePlateInput
               ref={licensePlateRef}
               label="Placa do veículo"
