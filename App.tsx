@@ -7,12 +7,15 @@ import {
   Roboto_700Bold,
   useFonts,
 } from '@expo-google-fonts/roboto'
+import { useNetInfo } from '@react-native-community/netinfo'
 import { AppProvider, UserProvider } from '@realm/react'
 import { StatusBar } from 'expo-status-bar'
+import { WifiSlash } from 'phosphor-react-native'
 import { SafeAreaProvider } from 'react-native-safe-area-context'
 import { ThemeProvider } from 'styled-components'
 
 import { Loading } from '@/components/loading'
+import TopMessage from '@/components/top-message'
 import { RealmProvider } from '@/lib/realm'
 import { Routes } from '@/routes'
 import { SignInScreen } from '@/screens/sign-in'
@@ -23,6 +26,7 @@ export default function App() {
     Roboto_400Regular,
     Roboto_700Bold,
   })
+  const netInfo = useNetInfo()
 
   if (!hasLoadedFonts) {
     return (
@@ -41,6 +45,10 @@ export default function App() {
         }}
       >
         <ThemeProvider theme={theme}>
+          {!netInfo.isConnected && (
+            <TopMessage message="Você está offline." icon={WifiSlash} />
+          )}
+
           <StatusBar style="light" />
           <UserProvider fallback={SignInScreen}>
             <RealmProvider>

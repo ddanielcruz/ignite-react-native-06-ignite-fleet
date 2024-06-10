@@ -19,6 +19,13 @@ export function HomeScreen() {
   const [vehicleInUse, setVehicleInUse] = useState<History | null>(null)
   const [usedVehicles, setUsedVehicles] = useState<History[]>([])
 
+  useEffect(() => {
+    realm.write(() => {
+      const histories = realm.objects<History>('History')
+      realm.delete(histories)
+    })
+  }, [realm, history])
+
   function handleRegisterMovement() {
     if (vehicleInUse) {
       navigation.navigate('arrival', { id: vehicleInUse._id.toString() })

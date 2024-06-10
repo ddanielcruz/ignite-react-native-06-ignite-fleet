@@ -11,6 +11,9 @@ importers:
       '@expo-google-fonts/roboto':
         specifier: ^0.2.3
         version: 0.2.3
+      '@react-native-community/netinfo':
+        specifier: 11.3.1
+        version: 11.3.1(react-native@0.74.1(@babel/core@7.24.6)(@babel/preset-env@7.24.6(@babel/core@7.24.6))(@types/react@18.2.79)(react@18.2.0))
       '@react-native-google-signin/google-signin':
         specifier: ^12.1.1
         version: 12.1.1(expo@51.0.9(@babel/core@7.24.6)(@babel/preset-env@7.24.6(@babel/core@7.24.6)))(react-dom@18.3.1(react@18.2.0))(react-native@0.74.1(@babel/core@7.24.6)(@babel/preset-env@7.24.6(@babel/core@7.24.6))(@types/react@18.2.79)(react@18.2.0))(react@18.2.0)
@@ -1101,6 +1104,11 @@ packages:
     resolution: {integrity: sha512-IqclB7VQ84ye8Fcs89HOpOscY4284VZg2pojHNl8H0Lzd4DadXJWQoxC7zWm8v2f8eyeX2kdhxp2ETD5tceIgA==}
     engines: {node: '>=18'}
     hasBin: true
+
+  '@react-native-community/netinfo@11.3.1':
+    resolution: {integrity: sha512-UBnJxyV0b7i9Moa97Av+HKho1ByzX0DtbJXzUQS5E3xhQs6P2D/Os0iw3ouy7joY1TVd6uIhplPbr7l1SJNaNQ==}
+    peerDependencies:
+      react-native: '>=0.59'
 
   '@react-native-google-signin/google-signin@12.1.1':
     resolution: {integrity: sha512-jvH8AFFD4syq+HaqHy8LZZl60QwT7ILtKmNLhw96hJ6G6EqOgGr+W2gOKQMbFlgBbu2rsgMiXQcaNpFphUcToA==}
@@ -6214,6 +6222,10 @@ snapshots:
       - encoding
       - supports-color
       - utf-8-validate
+
+  '@react-native-community/netinfo@11.3.1(react-native@0.74.1(@babel/core@7.24.6)(@babel/preset-env@7.24.6(@babel/core@7.24.6))(@types/react@18.2.79)(react@18.2.0))':
+    dependencies:
+      react-native: 0.74.1(@babel/core@7.24.6)(@babel/preset-env@7.24.6(@babel/core@7.24.6))(@types/react@18.2.79)(react@18.2.0)
 
   '@react-native-google-signin/google-signin@12.1.1(expo@51.0.9(@babel/core@7.24.6)(@babel/preset-env@7.24.6(@babel/core@7.24.6)))(react-dom@18.3.1(react@18.2.0))(react-native@0.74.1(@babel/core@7.24.6)(@babel/preset-env@7.24.6(@babel/core@7.24.6))(@types/react@18.2.79)(react@18.2.0))(react@18.2.0)':
     dependencies:

@@ -29,7 +29,7 @@ export function HomeHeader() {
         <UserImage source={pictureUrl} />
 
         <Greeting>
-          <GreetingMessage>Olá,</GreetingMessage>
+          <GreetingMessage>Olá</GreetingMessage>
           <UserName>{firstName}</UserName>
         </Greeting>
 
