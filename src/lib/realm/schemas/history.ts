@@ -1,9 +1,12 @@
 import { Realm } from '@realm/react'
 
-export interface CreateHistoryData {
+import { Coords } from './coords'
+
+export interface HistoryData {
   userId: string
   licensePlate: string
   description: string
+  coords: Coords[]
 }
 
 export type HistoryStatus = 'departure' | 'arrival'
@@ -13,6 +16,7 @@ export class History extends Realm.Object<History> {
   userId!: string
   licensePlate!: string
   description!: string
+  coords!: Coords[]
   status!: HistoryStatus
   createdAt!: Date
   updatedAt!: Date
@@ -28,13 +32,18 @@ export class History extends Realm.Object<History> {
       },
       licensePlate: 'string',
       description: 'string',
+      coords: {
+        type: 'list',
+        objectType: Coords.schema.name,
+        default: [],
+      },
       status: 'string',
       createdAt: 'date',
       updatedAt: 'date',
     },
   }
 
-  static create(data: CreateHistoryData) {
+  static create(data: HistoryData) {
     return {
       _id: new Realm.BSON.UUID(),
       ...data,

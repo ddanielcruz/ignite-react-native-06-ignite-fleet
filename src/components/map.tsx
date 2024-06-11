@@ -12,7 +12,7 @@ import { useTheme } from 'styled-components/native'
 import { IconBox } from './icon-box'
 
 export interface MapProps extends MapViewProps {
-  coordinates: [LatLng] | [LatLng, LatLng]
+  coordinates: LatLng[]
 }
 
 export function Map({ coordinates, ...props }: MapProps) {
@@ -20,7 +20,9 @@ export function Map({ coordinates, ...props }: MapProps) {
   const theme = useTheme()
 
   const center = calculateCoordinatesCenter(coordinates)
-  const [firstCoordinate, lastCoordinate] = coordinates
+  const firstCoordinate = coordinates[0]
+  const lastCoordinate =
+    coordinates.length > 1 ? coordinates[coordinates.length - 1] : null
 
   async function onMapLoaded() {
     if (lastCoordinate) {
@@ -66,9 +68,9 @@ export function Map({ coordinates, ...props }: MapProps) {
           </Marker>
 
           <Polyline
-            coordinates={[firstCoordinate, lastCoordinate]}
+            coordinates={coordinates}
             strokeColor={theme.colors.gray700}
-            strokeWidth={4}
+            strokeWidth={6}
           />
         </>
       )}

@@ -1,12 +1,19 @@
 import { useNavigation, useRoute } from '@react-navigation/native'
 import { X as XIcon } from 'phosphor-react-native'
+import { useEffect, useState } from 'react'
 import { Alert } from 'react-native'
 import { BSON } from 'realm'
 
 import { Button } from '@/components/button'
 import { ButtonIcon } from '@/components/button-icon'
+import { Map } from '@/components/map'
 import { Screen } from '@/components/screen'
 import { ScreenHeader } from '@/components/screen-header'
+import {
+  getStoredLocations,
+  removeStoredLocations,
+  StorageLocation,
+} from '@/lib/async-storage/location'
 import { useObject, useRealm } from '@/lib/realm'
 import { History } from '@/lib/realm/schemas/history'
 import { stopLocationTask } from '@/tasks/background-location-task'
@@ -17,17 +24,17 @@ export function ArrivalScreen() {
   const navigation = useNavigation()
   const params = useRoute().params as { id: string }
   const historyId = new BSON.UUID(params.id) as unknown as string
-
   const history = useObject(History, historyId)
   const realm = useRealm()
   const isVehicleInUse = history?.status === 'departure'
+  const [coordinates, setCoordinates] = useState<StorageLocation[]>([])
 
   async function removeVehicle() {
     realm.write(() => {
       realm.delete(history)
     })
 
-    await stopLocationTask()
+    await Promise.all([stopLocationTask(), removeStoredLocations()])
 
     navigation.goBack()
   }
@@ -45,12 +52,12 @@ export function ArrivalScreen() {
         throw new Error('vehicle-not-found')
       }
 
-      await stopLocationTask()
-
       realm.write(() => {
         history.status = 'arrival'
         history.updatedAt = new Date()
       })
+
+      await Promise.all([stopLocationTask(), removeStoredLocations()])
 
       Alert.alert('Sucesso', 'Chegada registrada com sucesso!')
       navigation.goBack()
@@ -63,9 +70,15 @@ export function ArrivalScreen() {
     }
   }
 
+  useEffect(() => {
+    getStoredLocations().then(setCoordinates)
+  }, [])
+
   return (
     <Screen>
       <ScreenHeader title={isVehicleInUse ? 'Chegada' : 'Detalhes'} />
+
+      {coordinates.length > 0 && <Map coordinates={coordinates} />}
 
       <Content>
         <Label>Placa do veículo</Label>
