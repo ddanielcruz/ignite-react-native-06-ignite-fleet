@@ -10,11 +10,13 @@ import { Car } from 'phosphor-react-native'
 import { useEffect, useMemo, useRef, useState } from 'react'
 import { Alert, ScrollView, TextInput } from 'react-native'
 import { KeyboardAwareScrollView } from 'react-native-keyboard-aware-scroll-view'
+import { LatLng } from 'react-native-maps'
 
 import { Button } from '@/components/button'
 import { LicensePlateInput } from '@/components/license-plate-input'
 import { Loading } from '@/components/loading'
 import { LocationInfo } from '@/components/location-info'
+import { Map } from '@/components/map'
 import { Screen } from '@/components/screen'
 import { ScreenHeader } from '@/components/screen-header'
 import { TextArea } from '@/components/text-area'
@@ -43,6 +45,7 @@ export function DepartureScreen() {
   const [isRegistering, setIsRegistering] = useState(false)
   const [isLoadingLocation, setIsLoadingLocation] = useState(true)
   const [currentAddress, setLocation] = useState<string | null>(null)
+  const [currentCoords, setCurrentCoords] = useState<LatLng | null>(null)
 
   async function handleRegisterDeparture() {
     if (!isValidLicensePlate(licensePlate)) {
@@ -104,7 +107,15 @@ export function DepartureScreen() {
       },
       (location) => {
         getAddressLocation(location.coords)
-          .then((address) => address && setLocation(address))
+          .then((address) => {
+            if (address) {
+              setLocation(address)
+              setCurrentCoords({
+                latitude: location.coords.latitude,
+                longitude: location.coords.longitude,
+              })
+            }
+          })
           .finally(() => setIsLoadingLocation(false))
       },
     ).then((sub) => {
@@ -144,6 +155,8 @@ export function DepartureScreen() {
 
       <KeyboardAwareScrollView>
         <ScrollView>
+          {currentCoords && <Map coordinates={[currentCoords]} />}
+
           <Content>
             {currentAddress && (
               <LocationInfo
