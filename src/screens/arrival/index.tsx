@@ -9,6 +9,7 @@ import { Screen } from '@/components/screen'
 import { ScreenHeader } from '@/components/screen-header'
 import { useObject, useRealm } from '@/lib/realm'
 import { History } from '@/lib/realm/schemas/history'
+import { stopLocationTask } from '@/tasks/background-location-task'
 
 import { Content, Description, Footer, Label, LicensePlate } from './styles'
 
@@ -21,10 +22,12 @@ export function ArrivalScreen() {
   const realm = useRealm()
   const isVehicleInUse = history?.status === 'departure'
 
-  function removeVehicle() {
+  async function removeVehicle() {
     realm.write(() => {
       realm.delete(history)
     })
+
+    await stopLocationTask()
 
     navigation.goBack()
   }
@@ -36,11 +39,13 @@ export function ArrivalScreen() {
     ])
   }
 
-  function handleArrival() {
+  async function handleArrival() {
     try {
       if (!history) {
         throw new Error('vehicle-not-found')
       }
+
+      await stopLocationTask()
 
       realm.write(() => {
         history.status = 'arrival'

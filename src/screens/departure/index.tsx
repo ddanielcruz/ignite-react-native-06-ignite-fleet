@@ -3,6 +3,7 @@ import { useUser } from '@realm/react'
 import {
   LocationAccuracy,
   LocationSubscription,
+  requestBackgroundPermissionsAsync,
   useForegroundPermissions,
   watchPositionAsync,
 } from 'expo-location'
@@ -22,6 +23,7 @@ import { ScreenHeader } from '@/components/screen-header'
 import { TextArea } from '@/components/text-area'
 import { useRealm } from '@/lib/realm'
 import { History } from '@/lib/realm/schemas/history'
+import { startLocationTask } from '@/tasks/background-location-task'
 import { getAddressLocation } from '@/utils/get-address-location'
 import { isValidLicensePlate } from '@/utils/validations'
 
@@ -33,6 +35,7 @@ export function DepartureScreen() {
   const navigation = useNavigation()
   const licensePlateRef = useRef<TextInput>(null)
   const descriptionRef = useRef<TextInput>(null)
+
   const [locationForegroundPermissions, requestLocationForegroundPermissions] =
     useForegroundPermissions()
   const hasLocationPermission = useMemo(
@@ -65,8 +68,25 @@ export function DepartureScreen() {
       )
     }
 
+    if (!currentCoords) {
+      return Alert.alert(
+        'Localização',
+        'Não foi possível obter a localização atual. Por favor, tente novamente.',
+      )
+    }
+
     try {
       setIsRegistering(true)
+
+      const backgroundPermissions = await requestBackgroundPermissionsAsync()
+      if (!backgroundPermissions.granted) {
+        return Alert.alert(
+          'Permissão negada',
+          'É necessário que o aplicativo tenha permissão para acessar a localização em segundo plano. Por favor, conceda a permissão e tente novamente.',
+        )
+      }
+
+      await startLocationTask()
 
       realm.write(() => {
         realm.create(
@@ -102,7 +122,7 @@ export function DepartureScreen() {
 
     watchPositionAsync(
       {
-        accuracy: LocationAccuracy.High,
+        accuracy: LocationAccuracy.Highest,
         timeInterval: 1000,
       },
       (location) => {

@@ -35,6 +35,7 @@ module.exports = {
             CFBundleURLSchemes: [GOOGLE_CLIENT_ID_IOS_REVERSED],
           },
         ],
+        UIBackgroundModes: ['location'],
       },
       config: {
         googleMapsApiKey: GOOGLE_MAPS_API_KEY,
@@ -46,6 +47,11 @@ module.exports = {
         backgroundColor: '#202024',
       },
       package: 'com.danielcruz.ignitefleet',
+      permissions: [
+        'ACCESS_FINE_LOCATION',
+        'ACCESS_COARSE_LOCATION',
+        'ACCESS_BACKGROUND_LOCATION',
+      ],
       config: {
         googleMaps: {
           apiKey: GOOGLE_MAPS_API_KEY,
