@@ -15,6 +15,7 @@ import {
   StorageLocation,
 } from '@/lib/async-storage/location'
 import { useObject, useRealm } from '@/lib/realm'
+import { Coords } from '@/lib/realm/schemas/coords'
 import { History } from '@/lib/realm/schemas/history'
 import { stopLocationTask } from '@/tasks/background-location-task'
 
@@ -52,9 +53,12 @@ export function ArrivalScreen() {
         throw new Error('vehicle-not-found')
       }
 
+      const coords = await getStoredLocations()
+
       realm.write(() => {
         history.status = 'arrival'
         history.updatedAt = new Date()
+        history.coords.push(...(coords as Coords[]))
       })
 
       await Promise.all([stopLocationTask(), removeStoredLocations()])
@@ -71,8 +75,18 @@ export function ArrivalScreen() {
   }
 
   useEffect(() => {
-    getStoredLocations().then(setCoordinates)
-  }, [])
+    if (history && history.status === 'arrival') {
+      setCoordinates(
+        history.coords.map((coords) => ({
+          latitude: coords.latitude,
+          longitude: coords.longitude,
+          timestamp: coords.timestamp,
+        })),
+      )
+    } else {
+      getStoredLocations().then((coords) => setCoordinates(coords))
+    }
+  }, [history])
 
   return (
     <Screen>

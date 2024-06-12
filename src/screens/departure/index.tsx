@@ -22,6 +22,7 @@ import { Screen } from '@/components/screen'
 import { ScreenHeader } from '@/components/screen-header'
 import { TextArea } from '@/components/text-area'
 import { useRealm } from '@/lib/realm'
+import { Coords } from '@/lib/realm/schemas/coords'
 import { History } from '@/lib/realm/schemas/history'
 import { startLocationTask } from '@/tasks/background-location-task'
 import { getAddressLocation } from '@/utils/get-address-location'
@@ -95,6 +96,13 @@ export function DepartureScreen() {
             userId: user.id,
             licensePlate: licensePlate.toUpperCase(),
             description: description.trim(),
+            coords: [
+              {
+                latitude: currentCoords.latitude,
+                longitude: currentCoords.longitude,
+                timestamp: new Date().getTime(),
+              } as unknown as Coords,
+            ],
           }),
         )
       })
