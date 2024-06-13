@@ -3,7 +3,7 @@ import { LocationObjectCoords, reverseGeocodeAsync } from 'expo-location'
 export async function getAddressLocation({
   latitude,
   longitude,
-}: LocationObjectCoords) {
+}: Pick<LocationObjectCoords, 'latitude' | 'longitude'>) {
   try {
     const [address] = await reverseGeocodeAsync({ latitude, longitude })
     const { city, region, street, streetNumber } = address

@@ -6,6 +6,7 @@ import { BSON } from 'realm'
 
 import { Button } from '@/components/button'
 import { ButtonIcon } from '@/components/button-icon'
+import { Locations } from '@/components/locations'
 import { Map } from '@/components/map'
 import { Screen } from '@/components/screen'
 import { ScreenHeader } from '@/components/screen-header'
@@ -18,6 +19,7 @@ import { useObject, useRealm } from '@/lib/realm'
 import { Coords } from '@/lib/realm/schemas/coords'
 import { History } from '@/lib/realm/schemas/history'
 import { stopLocationTask } from '@/tasks/background-location-task'
+import { getAddressLocation } from '@/utils/get-address-location'
 
 import { Content, Description, Footer, Label, LicensePlate } from './styles'
 
@@ -28,7 +30,10 @@ export function ArrivalScreen() {
   const history = useObject(History, historyId)
   const realm = useRealm()
   const isVehicleInUse = history?.status === 'departure'
+
   const [coordinates, setCoordinates] = useState<StorageLocation[]>([])
+  const [departureLocation, setDepartureLocation] = useState('')
+  const [arrivalLocation, setArrivalLocation] = useState('')
 
   async function removeVehicle() {
     realm.write(() => {
@@ -75,14 +80,26 @@ export function ArrivalScreen() {
   }
 
   useEffect(() => {
-    if (history && history.status === 'arrival') {
-      setCoordinates(
-        history.coords.map((coords) => ({
-          latitude: coords.latitude,
-          longitude: coords.longitude,
-          timestamp: coords.timestamp,
-        })),
-      )
+    if (!history) {
+      return
+    }
+
+    if (history.status === 'arrival') {
+      const coords = (history.coords || []).map((coords) => ({
+        latitude: coords.latitude,
+        longitude: coords.longitude,
+        timestamp: coords.timestamp,
+      }))
+
+      setCoordinates(coords)
+      if (coords.length) {
+        getAddressLocation(coords[0]).then((location) => {
+          setDepartureLocation(location || '')
+        })
+        getAddressLocation(coords[coords.length - 1]).then((location) => {
+          setArrivalLocation(location || '')
+        })
+      }
     } else {
       getStoredLocations().then((coords) => setCoordinates(coords))
     }
@@ -95,6 +112,13 @@ export function ArrivalScreen() {
       {coordinates.length > 0 && <Map coordinates={coordinates} />}
 
       <Content>
+        {!isVehicleInUse && (
+          <Locations
+            departure={{ label: 'Saída', location: departureLocation }}
+            arrival={{ label: 'Chegada', location: arrivalLocation }}
+          />
+        )}
+
         <Label>Placa do veículo</Label>
         <LicensePlate>{history?.licensePlate}</LicensePlate>
 
